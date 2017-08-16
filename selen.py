@@ -3,29 +3,27 @@
 from selenium.webdriver.firefox.webdriver import WebDriver
 import time
 
+from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.by import By
 from lekarstvo import Lekarstvo
 
-success = True
+
 wd = WebDriver()
-wd.implicitly_wait(60)
-
-def is_alert_present(wd):
-
-    try:
-        wd.switch_to_alert().text
-        return True
-    except:
-        return False
-
 
 def init_apteki():
     wd.get("https://allapteki.ru/")
-    wd.find_element_by_css_selector("h4.mainiconh4.mainiconh4_focus").click()
-    wd.find_element_by_id("Labelt1").click()
-    if not wd.find_element_by_id("Radiot1").is_selected():
-        wd.find_element_by_id("Radiot1").click()
-    wd.find_element_by_id("inputl1").click()
-    wd.find_element_by_id("inputl1").clear()
+    try:
+        element = WebDriverWait(wd, 10).until(EC.presence_of_element_located((By.CLASS_NAME, "mainiconh4")))
+    finally:
+        time.sleep(0.5)
+        element = wd.find_elements_by_class_name("mainiconh4")
+        element[2].click()
+        wd.find_element_by_id("Labelt1").click()
+        if not wd.find_element_by_id("Radiot1").is_selected():
+            wd.find_element_by_id("Radiot1").click()
+        wd.find_element_by_id("inputl1").click()
+        wd.find_element_by_id("inputl1").clear()
 
 
 def search_apteki():
@@ -78,5 +76,3 @@ try:
     time.sleep(5)
 finally:
     wd.quit()
-    if not success:
-        raise Exception("Test failed.")
