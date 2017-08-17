@@ -2,8 +2,8 @@
 
 import time
 
-from application import Application
-from lekarstvo import Lekarstvo
+from lekarstvo_pac.lekarstvo import Lekarstvo
+from site_control.application import Application
 
 app = Application()
 
